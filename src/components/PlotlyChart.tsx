@@ -3,8 +3,8 @@ import Plot from "react-plotly.js";
 import { useTheme } from "@/lib/themeContext";
 
 interface PlotlyChartProps {
-  data: Plotly.Data[];
-  layout?: Partial<Plotly.Layout>;
+  data: any[];
+  layout?: any;
   title?: string;
   height?: number;
   className?: string;
@@ -21,9 +21,9 @@ export function PlotlyChart({ data, layout = {}, title, height = 400, className 
       plot_bgcolor: "transparent",
       font: { family: "Inter", color: isDark ? "#94a3b8" : "#64748b", size: 12 },
       margin: { t: title ? 50 : 20, r: 20, b: 50, l: 60 },
-      xaxis: { gridcolor: isDark ? "rgba(148,163,184,0.1)" : "rgba(0,0,0,0.06)", zerolinecolor: isDark ? "rgba(148,163,184,0.2)" : "rgba(0,0,0,0.1)", ...layout.xaxis },
-      yaxis: { gridcolor: isDark ? "rgba(148,163,184,0.1)" : "rgba(0,0,0,0.06)", zerolinecolor: isDark ? "rgba(148,163,184,0.2)" : "rgba(0,0,0,0.1)", ...layout.yaxis },
-      legend: { font: { size: 11 }, bgcolor: "transparent", ...layout.legend },
+      xaxis: { gridcolor: isDark ? "rgba(148,163,184,0.1)" : "rgba(0,0,0,0.06)", zerolinecolor: isDark ? "rgba(148,163,184,0.2)" : "rgba(0,0,0,0.1)", ...(layout.xaxis || {}) },
+      yaxis: { gridcolor: isDark ? "rgba(148,163,184,0.1)" : "rgba(0,0,0,0.06)", zerolinecolor: isDark ? "rgba(148,163,184,0.2)" : "rgba(0,0,0,0.1)", ...(layout.yaxis || {}) },
+      legend: { font: { size: 11 }, bgcolor: "transparent", ...(layout.legend || {}) },
       height,
       ...layout,
     }),
@@ -35,7 +35,7 @@ export function PlotlyChart({ data, layout = {}, title, height = 400, className 
       <Plot
         data={data}
         layout={mergedLayout}
-        config={{ responsive: true, displayModeBar: true, modeBarButtonsToRemove: ["lasso2d", "select2d"], toImageButtonOptions: { format: "png", filename: title || "chart" } }}
+        config={{ responsive: true, displayModeBar: true, modeBarButtonsToRemove: ["lasso2d", "select2d"] as any, toImageButtonOptions: { format: "png", filename: title || "chart" } }}
         useResizeHandler
         style={{ width: "100%" }}
       />
