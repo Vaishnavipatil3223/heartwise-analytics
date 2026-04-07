@@ -1,25 +1,35 @@
 import {
   LayoutDashboard, Database, GitBranch, AlertTriangle, HeartPulse,
-  Pill, Salad, Scale, BarChart3, Info, Moon, Sun
+  Pill, Salad, Scale, BarChart3, Info, Moon, Sun, MessageCircle,
+  Shield, TrendingUp, Brain
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
-import { useLocation } from "react-router-dom";
 import { useTheme } from "@/lib/themeContext";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
   SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar,
 } from "@/components/ui/sidebar";
 
-const items = [
+const analyticsItems = [
   { title: "Dashboard", url: "/", icon: LayoutDashboard },
   { title: "Data Exploration", url: "/exploration", icon: Database },
   { title: "Correlation Analysis", url: "/correlation", icon: GitBranch },
   { title: "Risk Factors", url: "/risk-factors", icon: AlertTriangle },
-  { title: "Heart Disease Prediction", url: "/prediction", icon: HeartPulse },
-  { title: "Treatment Success", url: "/treatment", icon: Pill },
-  { title: "Lifestyle Recommendations", url: "/lifestyle", icon: Salad },
-  { title: "Bias & Limitations", url: "/bias", icon: Scale },
   { title: "Model Performance", url: "/model-performance", icon: BarChart3 },
+];
+
+const predictionItems = [
+  { title: "Heart Disease Prediction", url: "/prediction", icon: HeartPulse },
+  { title: "Risk Score Dashboard", url: "/risk-dashboard", icon: Shield },
+  { title: "Treatment Success", url: "/treatment", icon: Pill },
+  { title: "Decision Support", url: "/decision-support", icon: Brain },
+];
+
+const insightItems = [
+  { title: "Health Trends", url: "/health-trends", icon: TrendingUp },
+  { title: "Lifestyle Recommendations", url: "/lifestyle", icon: Salad },
+  { title: "AI Health Assistant", url: "/chatbot", icon: MessageCircle },
+  { title: "Bias & Limitations", url: "/bias", icon: Scale },
   { title: "About", url: "/about", icon: Info },
 ];
 
@@ -27,6 +37,26 @@ export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const { theme, toggle } = useTheme();
+
+  const renderGroup = (label: string, items: typeof analyticsItems) => (
+    <SidebarGroup>
+      <SidebarGroupLabel>{label}</SidebarGroupLabel>
+      <SidebarGroupContent>
+        <SidebarMenu>
+          {items.map((item) => (
+            <SidebarMenuItem key={item.title}>
+              <SidebarMenuButton asChild>
+                <NavLink to={item.url} end className="hover:bg-sidebar-accent/50" activeClassName="bg-sidebar-accent text-sidebar-primary font-medium">
+                  <item.icon className="mr-2 h-4 w-4 flex-shrink-0" />
+                  {!collapsed && <span className="truncate">{item.title}</span>}
+                </NavLink>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
+      </SidebarGroupContent>
+    </SidebarGroup>
+  );
 
   return (
     <Sidebar collapsible="icon">
@@ -42,23 +72,9 @@ export function AppSidebar() {
             )}
           </div>
         </div>
-        <SidebarGroup>
-          <SidebarGroupLabel>Analytics</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <NavLink to={item.url} end className="hover:bg-sidebar-accent/50" activeClassName="bg-sidebar-accent text-sidebar-primary font-medium">
-                      <item.icon className="mr-2 h-4 w-4 flex-shrink-0" />
-                      {!collapsed && <span className="truncate">{item.title}</span>}
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        {renderGroup("Analytics", analyticsItems)}
+        {renderGroup("Prediction & Support", predictionItems)}
+        {renderGroup("Insights", insightItems)}
         <div className="mt-auto p-3">
           <button onClick={toggle} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-sidebar-foreground/70 hover:bg-sidebar-accent transition-colors w-full">
             {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}

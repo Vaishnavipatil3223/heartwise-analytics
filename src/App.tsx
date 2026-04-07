@@ -18,6 +18,10 @@ const Lifestyle = lazy(() => import("./pages/Lifestyle"));
 const BiasLimitations = lazy(() => import("./pages/BiasLimitations"));
 const ModelPerformance = lazy(() => import("./pages/ModelPerformance"));
 const About = lazy(() => import("./pages/About"));
+const HealthChatbot = lazy(() => import("./pages/HealthChatbot"));
+const PatientRiskDashboard = lazy(() => import("./pages/PatientRiskDashboard"));
+const HealthTrends = lazy(() => import("./pages/HealthTrends"));
+const DecisionSupport = lazy(() => import("./pages/DecisionSupport"));
 
 const queryClient = new QueryClient();
 
@@ -47,6 +51,10 @@ const App = () => (
                 <Route path="/bias" element={<BiasLimitations />} />
                 <Route path="/model-performance" element={<ModelPerformance />} />
                 <Route path="/about" element={<About />} />
+                <Route path="/chatbot" element={<HealthChatbot />} />
+                <Route path="/risk-dashboard" element={<PatientRiskDashboard />} />
+                <Route path="/health-trends" element={<HealthTrends />} />
+                <Route path="/decision-support" element={<DecisionSupport />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
