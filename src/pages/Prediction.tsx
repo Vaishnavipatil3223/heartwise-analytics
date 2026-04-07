@@ -108,9 +108,10 @@ export default function Prediction() {
                 ],
                 threshold: { line: { color: riskColor, width: 4 }, thickness: 0.75, value: Number(riskPercent) },
               },
+              domain: { x: [0, 1], y: [0, 1] },
             }]}
             height={250}
-            layout={{ margin: { t: 30, b: 0, l: 30, r: 30 } }}
+            layout={{ margin: { t: 30, b: 0, l: 30, r: 30 }, autosize: true }}
           />
           <div className="text-center mt-2">
             <span className="text-2xl font-bold font-display" style={{ color: riskColor }}>{riskCategory}</span>
