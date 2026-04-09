@@ -18,7 +18,7 @@ function getAgeGroup(age: number) {
 }
 
 export default function HealthTrends() {
-  const [metric, setMetric] = useState<"Cholesterol" | "Blood Pressure" | "Heart Rate" | "Blood Sugar">("Cholesterol");
+  const [metric, setMetric] = useState<"Blood Pressure" | "Heart Rate" | "Blood Sugar">("Blood Pressure");
 
   const trendData = useMemo(() => {
     const groups: Record<string, { values: number[]; diseaseCount: number; total: number }> = {};
@@ -72,10 +72,9 @@ export default function HealthTrends() {
     <div>
       <PageHeader title="Health Trend Monitoring" description="Track cardiovascular health indicators across age groups and demographics" />
 
-      {/* Metric selector */}
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="stat-card mb-6">
         <div className="flex flex-wrap gap-2">
-          {(["Cholesterol", "Blood Pressure", "Heart Rate", "Blood Sugar"] as const).map((m) => (
+          {(["Blood Pressure", "Heart Rate", "Blood Sugar"] as const).map((m) => (
             <button
               key={m}
               onClick={() => setMetric(m)}
@@ -90,7 +89,6 @@ export default function HealthTrends() {
       </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        {/* Trend line with range */}
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="stat-card">
           <PlotlyChart
             title={`${metric} Trend by Age Group`}
@@ -128,7 +126,6 @@ export default function HealthTrends() {
           />
         </motion.div>
 
-        {/* Disease rate by age */}
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="stat-card">
           <PlotlyChart
             title="Heart Disease Rate by Age Group"
@@ -149,7 +146,6 @@ export default function HealthTrends() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        {/* Lifestyle trends */}
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="stat-card">
           <PlotlyChart
             title="Exercise & Stress by Age Group"
@@ -174,7 +170,6 @@ export default function HealthTrends() {
           />
         </motion.div>
 
-        {/* Smoking patterns */}
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="stat-card">
           <PlotlyChart
             title="Smoking Status by Age Group"

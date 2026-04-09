@@ -35,7 +35,7 @@ export function PlotlyChart({ data, layout = {}, title, height = 400, className 
       <Plot
         data={data}
         layout={mergedLayout}
-        config={{ responsive: true, displayModeBar: true, modeBarButtonsToRemove: ["lasso2d", "select2d"] as any, toImageButtonOptions: { format: "png", filename: title || "chart" } }}
+        config={{ responsive: true, displayModeBar: false, staticPlot: false }}
         useResizeHandler
         style={{ width: "100%" }}
       />
