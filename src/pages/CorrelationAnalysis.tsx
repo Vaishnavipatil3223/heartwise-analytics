@@ -24,10 +24,14 @@ export default function CorrelationAnalysis() {
             zmax: 1,
             text: correlationMatrix.values.map((row: number[]) => row.map((v) => v.toFixed(2))),
             texttemplate: "%{text}",
-            textfont: { size: 9 },
+            textfont: { size: 8 },
           }]}
-          layout={{ margin: { l: 120, b: 120 }, xaxis: { tickangle: -45 } }}
-          height={600}
+          layout={{
+            margin: { l: 140, b: 140, t: 50 },
+            xaxis: { tickangle: -45, tickfont: { size: 9 } },
+            yaxis: { tickfont: { size: 9 } },
+          }}
+          height={650}
         />
         <p className="text-sm text-muted-foreground mt-3 px-2">
           The heatmap shows pairwise Pearson correlations between all encoded features. 

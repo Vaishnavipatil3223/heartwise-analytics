@@ -31,31 +31,43 @@ function getRecommendations(profile: RiskProfile) {
   const recs = [];
 
   if (profile.cholesterol > 200) {
-    recs.push({ icon: Apple, title: "Diet: Lower Cholesterol", desc: `Your cholesterol (${profile.cholesterol} mg/dL) is above optimal. Reduce saturated fats, eat more fiber-rich foods (oats, beans, fruits). Include omega-3 fatty acids from fish, flaxseed, and walnuts.`, impact: Math.min(30, Math.round((profile.cholesterol - 200) / 5)), category: "diet" });
+    const impact = Math.min(30, Math.round((profile.cholesterol - 200) / 5));
+    recs.push({ icon: Apple, title: "Diet: Lower Cholesterol", desc: `Your cholesterol (${profile.cholesterol} mg/dL) is above optimal. Reduce saturated fats, eat more fiber-rich foods (oats, beans, fruits). Include omega-3 fatty acids from fish, flaxseed, and walnuts.`, impact, category: "diet" });
   }
   if (profile.bloodPressure > 120) {
-    recs.push({ icon: Heart, title: "Blood Pressure Management", desc: `Your blood pressure (${profile.bloodPressure} mmHg) is elevated. Reduce sodium intake to <2300mg/day, follow DASH diet, increase potassium-rich foods, and consider meditation.`, impact: Math.min(25, Math.round((profile.bloodPressure - 120) / 3)), category: "diet" });
+    const impact = Math.min(25, Math.round((profile.bloodPressure - 120) / 3));
+    recs.push({ icon: Heart, title: "Blood Pressure Management", desc: `Your blood pressure (${profile.bloodPressure} mmHg) is elevated. Reduce sodium intake to <2300mg/day, follow DASH diet, increase potassium-rich foods, and consider meditation.`, impact, category: "diet" });
   }
   if (profile.smoking !== "Never") {
-    recs.push({ icon: Cigarette, title: "Smoking Cessation", desc: `Status: ${profile.smoking}. Quitting smoking is the single most effective step. Risk drops 50% within 1 year. Consider nicotine replacement therapy or counseling.`, impact: 35, category: "lifestyle" });
+    recs.push({ icon: Cigarette, title: "Smoking Cessation", desc: `Status: ${profile.smoking}. Quitting smoking is the single most effective step. Risk drops 50% within 1 year. Consider nicotine replacement therapy or counseling.`, impact: profile.smoking === "Current" ? 35 : 10, category: "lifestyle" });
   }
   if (profile.exerciseHours < 5) {
-    recs.push({ icon: Dumbbell, title: "Increase Physical Activity", desc: `Current: ${profile.exerciseHours} hrs/week. Aim for 150+ minutes of moderate aerobic activity weekly. Start with brisk walking 30 min/day, 5 days/week.`, impact: Math.min(25, (5 - profile.exerciseHours) * 5), category: "exercise" });
+    const impact = Math.min(25, (5 - profile.exerciseHours) * 5);
+    recs.push({ icon: Dumbbell, title: "Increase Physical Activity", desc: `Current: ${profile.exerciseHours} hrs/week. Aim for 150+ minutes of moderate aerobic activity weekly. Start with brisk walking 30 min/day, 5 days/week.`, impact, category: "exercise" });
   }
   if (profile.stressLevel > 5) {
-    recs.push({ icon: Brain, title: "Stress Reduction", desc: `Stress level: ${profile.stressLevel}/10. Practice mindfulness meditation (10 min/day), deep breathing exercises, and ensure 7-8 hours of quality sleep.`, impact: Math.min(20, (profile.stressLevel - 5) * 4), category: "mental" });
+    const impact = Math.min(20, (profile.stressLevel - 5) * 4);
+    recs.push({ icon: Brain, title: "Stress Reduction", desc: `Stress level: ${profile.stressLevel}/10. Practice mindfulness meditation (10 min/day), deep breathing exercises, and ensure 7-8 hours of quality sleep.`, impact, category: "mental" });
   }
   if (profile.bloodSugar > 100) {
-    recs.push({ icon: Stethoscope, title: "Blood Sugar Control", desc: `Fasting blood sugar (${profile.bloodSugar} mg/dL) is elevated. Monitor regularly, reduce refined carbohydrates, and maintain consistent meal schedules.`, impact: Math.min(25, Math.round((profile.bloodSugar - 100) / 4)), category: "medical" });
+    const impact = Math.min(25, Math.round((profile.bloodSugar - 100) / 4));
+    recs.push({ icon: Stethoscope, title: "Blood Sugar Control", desc: `Fasting blood sugar (${profile.bloodSugar} mg/dL) is elevated. Monitor regularly, reduce refined carbohydrates, and maintain consistent meal schedules.`, impact, category: "medical" });
   }
   if (profile.obesity === "Yes") {
     recs.push({ icon: Dumbbell, title: "Weight Management", desc: "Aim for gradual weight loss of 1-2 lbs/week through caloric deficit and increased activity. Even 5-10% weight loss significantly reduces risk.", impact: 20, category: "exercise" });
   }
   if (profile.alcoholIntake === "Heavy") {
     recs.push({ icon: Heart, title: "Reduce Alcohol Intake", desc: "Heavy drinking raises blood pressure and weakens heart muscle. Limit to ≤1 drink/day for women, ≤2 for men.", impact: 15, category: "lifestyle" });
+  } else if (profile.alcoholIntake === "Moderate") {
+    recs.push({ icon: Heart, title: "Monitor Alcohol Intake", desc: "Moderate drinking is borderline. Consider reducing further for optimal heart health.", impact: 5, category: "lifestyle" });
   }
   if (profile.diabetes === "Yes") {
     recs.push({ icon: Stethoscope, title: "Diabetes Management", desc: "Maintain HbA1c below 7%. Regular monitoring, medication adherence, and dietary management are crucial for cardiovascular protection.", impact: 20, category: "medical" });
+  }
+
+  // If no risk factors, add positive feedback
+  if (recs.length === 0) {
+    recs.push({ icon: Heart, title: "Great Health Profile!", desc: "Your current profile shows minimal risk factors. Continue maintaining healthy habits with regular exercise, balanced diet, and stress management.", impact: 0, category: "lifestyle" });
   }
 
   return recs;
@@ -65,6 +77,8 @@ export default function Lifestyle() {
   const [profile, setProfile] = useState<RiskProfile>(defaultProfile);
   const recommendations = useMemo(() => getRecommendations(profile), [profile]);
   const totalImpact = recommendations.reduce((sum, r) => sum + r.impact, 0);
+  const maxPossibleImpact = 195; // Sum of all maximum impacts
+  const normalizedImpact = Math.min(Math.round((totalImpact / maxPossibleImpact) * 100), 100);
 
   return (
     <div>
@@ -103,26 +117,29 @@ export default function Lifestyle() {
 
           <div className="mt-4 p-3 rounded-lg bg-primary/10 text-center">
             <p className="text-xs text-muted-foreground">Estimated Risk Reduction Potential</p>
-            <p className="text-3xl font-bold font-display text-primary">{Math.min(totalImpact, 100)}%</p>
+            <p className="text-3xl font-bold font-display text-primary">{normalizedImpact}%</p>
+            <p className="text-[10px] text-muted-foreground mt-1">{recommendations.length} actionable recommendations</p>
           </div>
         </motion.div>
 
         <div className="lg:col-span-2 space-y-4">
           <h3 className="text-lg font-bold font-display">Personalized Health Plan ({recommendations.length} Recommendations)</h3>
           {recommendations.map((rec, i) => (
-            <motion.div key={i} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.1 }} className="stat-card flex gap-4">
+            <motion.div key={`${rec.title}-${rec.impact}`} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.1 }} className="stat-card flex gap-4">
               <div className="p-3 rounded-xl bg-primary/10 h-fit">
                 <rec.icon className="h-5 w-5 text-primary" />
               </div>
               <div className="flex-1">
                 <div className="flex items-center justify-between">
                   <h4 className="font-semibold">{rec.title}</h4>
-                  <span className="text-xs font-medium px-2 py-1 rounded-full bg-success/10 text-success">-{rec.impact}% risk</span>
+                  {rec.impact > 0 && <span className="text-xs font-medium px-2 py-1 rounded-full bg-success/10 text-success">-{rec.impact}% risk</span>}
                 </div>
                 <p className="text-sm text-muted-foreground mt-1">{rec.desc}</p>
-                <div className="mt-2 h-2 rounded-full bg-muted overflow-hidden">
-                  <motion.div initial={{ width: 0 }} animate={{ width: `${rec.impact * 3}%` }} transition={{ delay: 0.5 + i * 0.1, duration: 0.8 }} className="h-full rounded-full bg-success" />
-                </div>
+                {rec.impact > 0 && (
+                  <div className="mt-2 h-2 rounded-full bg-muted overflow-hidden">
+                    <motion.div initial={{ width: 0 }} animate={{ width: `${rec.impact * 3}%` }} transition={{ delay: 0.5 + i * 0.1, duration: 0.8 }} className="h-full rounded-full bg-success" />
+                  </div>
+                )}
               </div>
             </motion.div>
           ))}

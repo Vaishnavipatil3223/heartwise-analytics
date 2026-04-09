@@ -34,7 +34,7 @@ export default function DataExploration() {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="stat-card">
           <PlotlyChart
             title={`${selectedCol} — Histogram`}
@@ -61,9 +61,7 @@ export default function DataExploration() {
             height={380}
           />
         </motion.div>
-      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="stat-card">
           <PlotlyChart
             title={`${selectedCol} — Violin Plot`}
@@ -74,25 +72,6 @@ export default function DataExploration() {
               box: { visible: true },
               meanline: { visible: true },
             }))}
-            height={380}
-          />
-        </motion.div>
-
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="stat-card">
-          <PlotlyChart
-            title={`${selectedCol} — Density (KDE)`}
-            data={[0, 1].map((hd) => {
-              const vals = rawData.filter((d: any) => d["Heart Disease"] === hd).map((d: any) => d[selectedCol]);
-              return {
-                x: vals,
-                type: "histogram" as const,
-                histnorm: "probability density",
-                opacity: 0.6,
-                name: hd === 0 ? "No Disease" : "Heart Disease",
-                marker: { color: hd === 0 ? "#22c55e" : "#ef4444" },
-              };
-            })}
-            layout={{ barmode: "overlay", xaxis: { title: selectedCol } }}
             height={380}
           />
         </motion.div>

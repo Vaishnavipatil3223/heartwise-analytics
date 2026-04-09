@@ -17,7 +17,7 @@ export default function ModelPerformance() {
 
   return (
     <div>
-      <PageHeader title="Model Performance" description="Comprehensive comparison of machine learning models with evaluation metrics, ROC curves, and confusion matrices" />
+      <PageHeader title="Model Performance" description="Comprehensive comparison of machine learning models trained with Python (scikit-learn, XGBoost)" />
 
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="stat-card mb-6">
         <PlotlyChart
@@ -35,32 +35,6 @@ export default function ModelPerformance() {
       </motion.div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="stat-card">
-          <PlotlyChart
-            title="ROC Curves"
-            data={[
-              ...Object.entries(modelResults).map(([name, r]) => ({
-                x: r.roc.fpr,
-                y: r.roc.tpr,
-                type: "scatter" as const,
-                mode: "lines" as const,
-                name: `${name} (AUC: ${r.auc})`,
-                line: { color: colors[name], width: 2 },
-              })),
-              {
-                x: [0, 1],
-                y: [0, 1],
-                type: "scatter" as const,
-                mode: "lines" as const,
-                name: "Random Baseline",
-                line: { color: "#94a3b8", dash: "dash" as const, width: 1 },
-              },
-            ]}
-            layout={{ xaxis: { title: "False Positive Rate" }, yaxis: { title: "True Positive Rate" } }}
-            height={400}
-          />
-        </motion.div>
-
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="stat-card">
           <h3 className="text-lg font-bold font-display mb-4">Performance Summary</h3>
           <div className="space-y-3">
@@ -80,6 +54,28 @@ export default function ModelPerformance() {
                 </div>
               </div>
             ))}
+          </div>
+        </motion.div>
+
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="stat-card">
+          <h3 className="text-lg font-bold font-display mb-4">ML Pipeline Details</h3>
+          <div className="space-y-3 text-sm">
+            <div className="p-3 rounded-lg bg-muted/50">
+              <p className="font-semibold text-foreground">🐍 Backend Language</p>
+              <p className="text-muted-foreground">Python (scikit-learn, XGBoost, pandas, numpy)</p>
+            </div>
+            <div className="p-3 rounded-lg bg-muted/50">
+              <p className="font-semibold text-foreground">🔧 Preprocessing</p>
+              <p className="text-muted-foreground">Label Encoding for categorical features, StandardScaler normalization</p>
+            </div>
+            <div className="p-3 rounded-lg bg-muted/50">
+              <p className="font-semibold text-foreground">📊 Train/Test Split</p>
+              <p className="text-muted-foreground">80/20 stratified split, random_state=42 for reproducibility</p>
+            </div>
+            <div className="p-3 rounded-lg bg-muted/50">
+              <p className="font-semibold text-foreground">🏆 Best Model</p>
+              <p className="text-muted-foreground">{bestModel} with AUC: {(modelResults as any)[bestModel]?.auc}</p>
+            </div>
           </div>
         </motion.div>
       </div>
@@ -106,28 +102,6 @@ export default function ModelPerformance() {
           </motion.div>
         ))}
       </div>
-
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="stat-card mt-6">
-        <h3 className="text-lg font-bold font-display mb-3">SHAP Model Explainability</h3>
-        <p className="text-sm text-muted-foreground leading-relaxed">
-          SHAP (SHapley Additive exPlanations) values provide a unified measure of feature importance based on game theory.
-          Each feature's SHAP value represents its contribution to pushing the model's prediction from the base value (average prediction)
-          to the actual predicted value. Positive SHAP values push the prediction towards heart disease, while negative values push away from it.
-          This makes the model transparent and trustworthy — essential for healthcare applications where explainability is critical.
-        </p>
-        <PlotlyChart
-          title="SHAP Feature Impact (XGBoost)"
-          data={[{
-            y: mlResults.shapImportance.map((f) => f.feature).reverse(),
-            x: mlResults.shapImportance.map((f) => f.importance).reverse(),
-            type: "bar",
-            orientation: "h",
-            marker: { color: mlResults.shapImportance.map((_, i) => `hsl(${262 - i * 10}, 70%, ${55 + i * 2}%)`).reverse() },
-          }]}
-          layout={{ margin: { l: 160 }, xaxis: { title: "Mean |SHAP Value|" } }}
-          height={450}
-        />
-      </motion.div>
     </div>
   );
 }

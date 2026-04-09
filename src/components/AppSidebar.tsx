@@ -1,7 +1,7 @@
 import {
   LayoutDashboard, Database, GitBranch, AlertTriangle, HeartPulse,
-  Pill, Salad, Scale, BarChart3, Info, Moon, Sun, MessageCircle,
-  Shield, TrendingUp, Brain
+  Pill, Salad, BarChart3, Info, Moon, Sun, MessageCircle,
+  Shield, TrendingUp
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useTheme } from "@/lib/themeContext";
@@ -22,14 +22,12 @@ const predictionItems = [
   { title: "Heart Disease Prediction", url: "/prediction", icon: HeartPulse },
   { title: "Risk Score Dashboard", url: "/risk-dashboard", icon: Shield },
   { title: "Treatment Success", url: "/treatment", icon: Pill },
-  { title: "Decision Support", url: "/decision-support", icon: Brain },
 ];
 
 const insightItems = [
   { title: "Health Trends", url: "/health-trends", icon: TrendingUp },
   { title: "Lifestyle Recommendations", url: "/lifestyle", icon: Salad },
   { title: "AI Health Assistant", url: "/chatbot", icon: MessageCircle },
-  { title: "Bias & Limitations", url: "/bias", icon: Scale },
   { title: "About", url: "/about", icon: Info },
 ];
 
