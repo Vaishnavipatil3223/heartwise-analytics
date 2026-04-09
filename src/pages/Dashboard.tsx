@@ -61,9 +61,9 @@ export default function Dashboard() {
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }} className="stat-card">
           <PlotlyChart
             title="Heart Disease by Gender"
-            data={Object.entries(crossTabs.Gender).map(([gender, vals]) => ({
+            data={Object.entries(crossTabs.Gender).map(([gender, vals]: [string, any]) => ({
               x: ["No Disease", "Heart Disease"],
-              y: [vals["No Disease"], vals["Disease"]],
+              y: [Math.round(vals.Count * (1 - vals.Disease)), Math.round(vals.Count * vals.Disease)],
               type: "bar" as const,
               name: gender,
             }))}
@@ -92,9 +92,9 @@ export default function Dashboard() {
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }} className="stat-card">
         <PlotlyChart
           title="Heart Disease by Chest Pain Type"
-          data={Object.entries(crossTabs["Chest Pain Type"]).map(([type, vals]) => ({
+          data={Object.entries(crossTabs["Chest Pain Type"]).map(([type, vals]: [string, any]) => ({
             x: ["No Disease", "Heart Disease"],
-            y: [vals["No Disease"], vals["Disease"]],
+            y: [Math.round(vals.Count * (1 - vals.Disease)), Math.round(vals.Count * vals.Disease)],
             type: "bar" as const,
             name: type,
           }))}
