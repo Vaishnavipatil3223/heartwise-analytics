@@ -5,20 +5,23 @@ import { Users, HeartPulse, Activity, AlertTriangle, TrendingUp, Stethoscope } f
 import mlResults from "@/data/mlResults.json";
 import { motion } from "framer-motion";
 
-const { datasetInfo, descriptiveStats, modelResults, bestModel, catDistributions, crossTabs } = mlResults;
+const { datasetInfo, descriptiveStats, modelResults, bestModel, catDistributions, crossTabs, rawData } = mlResults;
+
+const diseaseCount = rawData.filter((r) => r["Heart Disease"] === 1).length;
+const healthyCount = rawData.filter((r) => r["Heart Disease"] === 0).length;
 
 export default function Dashboard() {
-  const diseaseRate = ((datasetInfo.diseaseCount / datasetInfo.rows) * 100).toFixed(1);
+  const diseaseRate = ((diseaseCount / datasetInfo.rows) * 100).toFixed(1);
   const bestAcc = (modelResults[bestModel as keyof typeof modelResults]?.accuracy * 100).toFixed(1);
 
   return (
     <div>
-      <PageHeader title="Dashboard Overview" description="AI-Powered Heart Disease Risk Prediction & Decision Support System" />
+      <PageHeader title="Dashboard Overview" description="ML-Powered Heart Disease Risk Prediction System (Python Backend)" />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-6">
         <StatCard title="Total Patients" value={datasetInfo.rows.toLocaleString()} subtitle="In dataset" icon={Users} color="primary" />
-        <StatCard title="Heart Disease Cases" value={datasetInfo.diseaseCount} subtitle={`${diseaseRate}% prevalence`} icon={HeartPulse} color="destructive" />
-        <StatCard title="Healthy Patients" value={datasetInfo.healthyCount} subtitle="No heart disease" icon={Activity} color="success" />
+        <StatCard title="Heart Disease Cases" value={diseaseCount} subtitle={`${diseaseRate}% prevalence`} icon={HeartPulse} color="destructive" />
+        <StatCard title="Healthy Patients" value={healthyCount} subtitle="No heart disease" icon={Activity} color="success" />
         <StatCard title="Features Analyzed" value={datasetInfo.columns - 1} subtitle="Health indicators" icon={Stethoscope} color="accent" />
         <StatCard title="Best Model AUC" value={`${bestAcc}%`} subtitle={bestModel} icon={TrendingUp} color="primary" />
         <StatCard title="Avg Age" value={descriptiveStats.Age.mean} subtitle={`Range: ${descriptiveStats.Age.min}-${descriptiveStats.Age.max}`} icon={AlertTriangle} color="warning" />
@@ -29,7 +32,7 @@ export default function Dashboard() {
           <PlotlyChart
             title="Heart Disease Distribution"
             data={[{
-              values: [datasetInfo.healthyCount, datasetInfo.diseaseCount],
+              values: [healthyCount, diseaseCount],
               labels: ["No Disease", "Heart Disease"],
               type: "pie",
               marker: { colors: ["#22c55e", "#ef4444"] },
