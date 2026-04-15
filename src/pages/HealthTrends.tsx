@@ -89,42 +89,6 @@ export default function HealthTrends() {
       </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="stat-card">
-          <PlotlyChart
-            title={`${metric} Trend by Age Group`}
-            data={[
-              {
-                x: trendData.map((d) => d.group),
-                y: trendData.map((d) => d.mean),
-                type: "scatter",
-                mode: "lines+markers",
-                name: "Mean",
-                line: { color: "#0ea5e9", width: 3 },
-                marker: { size: 10, color: "#0ea5e9" },
-              },
-              {
-                x: trendData.map((d) => d.group),
-                y: trendData.map((d) => d.max),
-                type: "scatter",
-                mode: "lines",
-                name: "Max",
-                line: { color: "#ef4444", dash: "dot", width: 1 },
-              },
-              {
-                x: trendData.map((d) => d.group),
-                y: trendData.map((d) => d.min),
-                type: "scatter",
-                mode: "lines",
-                name: "Min",
-                line: { color: "#22c55e", dash: "dot", width: 1 },
-                fill: "tonexty",
-                fillcolor: "rgba(34,197,94,0.08)",
-              },
-            ]}
-            layout={{ yaxis: { title: metric }, xaxis: { title: "Age Group" } }}
-            height={380}
-          />
-        </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="stat-card">
           <PlotlyChart
