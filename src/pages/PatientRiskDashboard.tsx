@@ -78,22 +78,6 @@ export default function PatientRiskDashboard() {
         <StatCard title="Avg Risk Score" value={`${(avgRisk * 100).toFixed(1)}%`} subtitle="Population mean" icon={HeartPulse} color="primary" />
       </div>
 
-      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="stat-card mb-6">
-        <PlotlyChart
-          title="Risk Score Distribution"
-          data={[{
-            x: riskBuckets,
-            y: ["0-10%", "10-20%", "20-30%", "30-40%", "40-50%", "50-60%", "60-70%", "70-80%", "80-90%", "90-100%"],
-            type: "bar",
-            orientation: "h",
-            marker: {
-              color: riskBuckets.map((_, i) => i < 3 ? "#22c55e" : i < 6 ? "#f59e0b" : "#ef4444"),
-            },
-          }]}
-          layout={{ xaxis: { title: "Number of Patients" }, margin: { l: 80 } }}
-          height={380}
-        />
-      </motion.div>
 
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="stat-card">
         <h3 className="text-lg font-bold font-display mb-4 flex items-center gap-2">

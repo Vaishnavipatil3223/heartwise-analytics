@@ -62,19 +62,6 @@ export default function DataExploration() {
           />
         </motion.div>
 
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="stat-card">
-          <PlotlyChart
-            title={`${selectedCol} — Violin Plot`}
-            data={[0, 1].map((hd) => ({
-              y: rawData.filter((d: any) => d["Heart Disease"] === hd).map((d: any) => d[selectedCol]),
-              type: "violin" as const,
-              name: hd === 0 ? "No Disease" : "Heart Disease",
-              box: { visible: true },
-              meanline: { visible: true },
-            }))}
-            height={380}
-          />
-        </motion.div>
       </div>
 
       <h2 className="text-xl font-bold font-display mb-4">Categorical Feature Distributions</h2>
