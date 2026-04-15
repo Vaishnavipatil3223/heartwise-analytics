@@ -57,27 +57,6 @@ export default function ModelPerformance() {
           </div>
         </motion.div>
 
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="stat-card">
-          <h3 className="text-lg font-bold font-display mb-4">ML Pipeline Details</h3>
-          <div className="space-y-3 text-sm">
-            <div className="p-3 rounded-lg bg-muted/50">
-              <p className="font-semibold text-foreground">🐍 Backend Language</p>
-              <p className="text-muted-foreground">Python (scikit-learn, XGBoost, pandas, numpy)</p>
-            </div>
-            <div className="p-3 rounded-lg bg-muted/50">
-              <p className="font-semibold text-foreground">🔧 Preprocessing</p>
-              <p className="text-muted-foreground">Label Encoding for categorical features, StandardScaler normalization</p>
-            </div>
-            <div className="p-3 rounded-lg bg-muted/50">
-              <p className="font-semibold text-foreground">📊 Train/Test Split</p>
-              <p className="text-muted-foreground">80/20 stratified split, random_state=42 for reproducibility</p>
-            </div>
-            <div className="p-3 rounded-lg bg-muted/50">
-              <p className="font-semibold text-foreground">🏆 Best Model</p>
-              <p className="text-muted-foreground">{bestModel} with AUC: {(modelResults as any)[bestModel]?.auc}</p>
-            </div>
-          </div>
-        </motion.div>
       </div>
 
       <h2 className="text-xl font-bold font-display mb-4">Confusion Matrices</h2>

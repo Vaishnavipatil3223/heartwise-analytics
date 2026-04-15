@@ -74,16 +74,15 @@ export default function Dashboard() {
 
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="stat-card">
           <PlotlyChart
-            title="Model Performance Comparison"
-            data={[{
-              x: Object.keys(modelResults),
-              y: Object.values(modelResults).map((m) => m.accuracy * 100),
-              type: "bar",
-              marker: { color: ["#0ea5e9", "#22c55e", "#8b5cf6", "#f59e0b"] },
-              text: Object.values(modelResults).map((m) => `${(m.accuracy * 100).toFixed(1)}%`),
-              textposition: "outside",
-            }]}
-            layout={{ yaxis: { title: "Accuracy (%)", range: [0, 105] } }}
+            title="Model Comparison — All Metrics"
+            data={Object.entries(modelResults).map(([name, r]) => ({
+              x: ["ACCURACY", "PRECISION", "RECALL", "F1", "AUC"],
+              y: [r.accuracy * 100, r.precision * 100, r.recall * 100, r.f1 * 100, r.auc * 100],
+              type: "bar" as const,
+              name,
+              marker: { color: { "Logistic Regression": "#0ea5e9", "Random Forest": "#22c55e", "XGBoost": "#8b5cf6", "SVM": "#f59e0b" }[name] },
+            }))}
+            layout={{ barmode: "group", yaxis: { title: "Score (%)", range: [0, 105] } }}
             height={350}
           />
         </motion.div>
