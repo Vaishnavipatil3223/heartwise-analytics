@@ -187,27 +187,30 @@ export default function Prediction() {
 
         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="stat-card flex flex-col items-center justify-center">
           <h3 className="text-lg font-bold font-display mb-4">Prediction Result</h3>
-          <PlotlyChart
-            data={[{
-              type: "indicator",
-              mode: "gauge+number",
-              value: Number(riskPercent),
-              title: { text: "Risk Score (%)" },
-              gauge: {
-                axis: { range: [0, 100] },
-                bar: { color: riskColor },
-                steps: [
-                  { range: [0, 30], color: "rgba(34,197,94,0.15)" },
-                  { range: [30, 60], color: "rgba(245,158,11,0.15)" },
-                  { range: [60, 100], color: "rgba(239,68,68,0.15)" },
-                ],
-                threshold: { line: { color: riskColor, width: 4 }, thickness: 0.75, value: Number(riskPercent) },
-              },
-              domain: { x: [0, 1], y: [0, 1] },
-            }]}
-            height={250}
-            layout={{ margin: { t: 30, b: 0, l: 30, r: 30 }, autosize: true }}
-          />
+          <div style={{ width: 280, height: 220, flexShrink: 0 }}>
+            <PlotlyChart
+              data={[{
+                type: "indicator",
+                mode: "gauge+number",
+                value: Number(riskPercent),
+                title: { text: "Risk Score (%)", font: { size: 13 } },
+                number: { font: { size: 28 } },
+                gauge: {
+                  axis: { range: [0, 100], tickfont: { size: 10 } },
+                  bar: { color: riskColor },
+                  steps: [
+                    { range: [0, 30], color: "rgba(34,197,94,0.15)" },
+                    { range: [30, 60], color: "rgba(245,158,11,0.15)" },
+                    { range: [60, 100], color: "rgba(239,68,68,0.15)" },
+                  ],
+                  threshold: { line: { color: riskColor, width: 4 }, thickness: 0.75, value: Number(riskPercent) },
+                },
+                domain: { x: [0, 1], y: [0, 1] },
+              }]}
+              height={220}
+              layout={{ margin: { t: 30, b: 0, l: 20, r: 20 }, autosize: false, width: 280 }}
+            />
+          </div>
           <div className="text-center mt-2">
             <span className="text-2xl font-bold font-display" style={{ color: riskColor }}>{riskCategory}</span>
             <p className="text-sm text-muted-foreground mt-2">Predicted probability: {riskPercent}%</p>
